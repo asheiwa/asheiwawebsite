@@ -25,7 +25,7 @@ SECRET_KEY = '^2!f*(e3=#2$kch$bgd4f4vhme8b$*(hm@a!r@c8860l^-ire$'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['asheiwawebsite.herokuapp.com']
 
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'afip.hidayatulloh@gmail.com'
