@@ -1,0 +1,56 @@
+{% load split_tags %}
+
+<div class="col-xs-6 col-sm-4 col-md-3 sidebar-offcanvas" id="sidebar">
+
+    <form method="GET" action="">
+        <input type="text" id="searchText" name='q' placeholder="Search posts" value='{{ request.GET.q }}'>
+        <button type="submit" value="Search" id="btn-search">
+        <i class="fa fa-search" aria-hidden="true"></i>
+        </button>
+        <!-- <input type="submit" value="Search"> -->
+
+    </form>
+    
+    <span> <a class="btn" id="btn-category"  href="/?c=PGT" > <span class="badge">{{post_count.PGT}}</span> Project</a></span>
+    <span> <a class="btn" id="btn-category"  href="/?c=RGN" > <span class="badge">{{post_count.RGN}}</span> Rigging</a></span>
+    <span> <a class="btn" id="btn-category"  href="/?c=SCT" > <span class="badge">{{post_count.SCT}}</span> Scripting</a></span>
+    <span> <a class="btn" id="btn-category"  href="/?c=MDL" > <span class="badge">{{post_count.MDL}}</span> Modeling</a></span>
+    <span> <a class="btn" id="btn-category"  href="/?c=TRL" > <span class="badge">{{post_count.TRL}}</span> Tutorial</a></span>
+    <span> <a class="btn" id="btn-category"  href="/?c=OTH" > <span class="badge">{{post_count.OTH}}</span> Other</a></span>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="text-center panel-title"><i class="fa fa-tags" aria-hidden="true"></i> Tags Cloud</h3></div>
+        <div id="panel-body-sidebar" class="panel-body">
+            {% for tag in tag_all %}
+                    <div id="label-tag" class="label"><a id="a-tag" href="/?t={{ tag }}">{{ tag }}</a></div>
+            {% endfor %}
+
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="text-center panel-title"><i class="fa fa-pencil-square" aria-hidden="true"></i> Recent Posts </h3></div>
+        <div id="panel-body-sidebar" class="panel-body">
+            <ul>
+                {% for obj in recent_post %}
+                    <li><a href="{{ obj.get_absolute_url }}">{{ obj.title }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="text-center panel-title"><i class="fa fa-comments" aria-hidden="true"></i> Recent Comments</h3></div>
+        <div id="panel-body-sidebar" class="panel-body">
+            <ul>
+                {% for comment in recent_comments %}
+                    <li><a href="{{ comment.content_object.get_absolute_url }}">{{ comment.name }} on {{ comment.content_object.title }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+</div>

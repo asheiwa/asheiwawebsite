@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<div class="col-xs-12 col-sm-6 col-md-6" id="content">
+    Feel free to contact me via email
+</div>
+
+<div class="col-xs-12 col-sm-6 col-md-6" id="content">
+    <h4> Contact </h4>
+    <hr class="style1">
+
+    <form method="POST" action="">{% csrf_token %}
+    {{ form|crispy }}
+
+    <input type="submit" value="Send Email">
+    {% include "message_display.html" %}
+    </form>
+</div>
+
+{% endblock content %}

@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% load split_tags %}
+
+{% block content %}
+
+{% include 'sidebar.html' %}
+
+<div class="col-xs-12 col-sm-8 col-md-9" id="content">
+    {% include "message_display.html" %}
+
+    {% include "toggle-nav.html" %}
+
+<!-- Post List -->
+{% for obj in object_list %}
+	<div class="well">
+		<a href="{{ obj.get_absolute_url }}"><h4 id="blog-title"><i class="fa fa-pencil-square" aria-hidden="true"></i> {{ obj.title }} </h4> </a>
+		{% if not obj.publish %} <h5 style="color:red;font-weight:bold;"> Not Published </h5> {% endif %}
+		<div id="post-info">
+		<a href="/?c={{ obj.category }}" style="font-weight:bold;"> {{ obj.get_category_display }} </a> &nbsp;|&nbsp;
+
+		{% for tag in obj.tag|split_tags %}
+		<span id="label-tag" class="label"> <a id="a-tag" href="/?t={{ tag }}">{{ tag }}</a> </span>
+		{% endfor %} &nbsp;|&nbsp;
+
+		<span>{{ obj.created }} </span> &nbsp;|&nbsp;
+		<!-- {% if obj.user.get_full_name %}<span> Author : {{ obj.user.get_full_name }} &nbsp;|&nbsp; </span>{% endif %} -->
+		<span> Update {{ obj.modified|timesince }} ago </span> 
+		</div>
+		{% if obj.image %}<a href="{{ obj.get_absolute_url }}"> <img id="image-blog" src="{{ obj.image.url }}" class="img-responsive img-rounded"></a>{% endif %}
+		<div class="post-detail-item" id="p-description"> {{ obj.get_markdown|truncatechars_html:500 }} </div>
+		<div style="text-align:right;">
+		<span >
+			<a href="{{ obj.get_absolute_url }}" class="btn" id="btn-post" role="button">Read more ...</a>
+			{% if auth %}
+			<a href="{{ obj.get_absolute_url }}edit" class="btn" id="btn-post" role="button">Edit</a>
+			<a href="{{ obj.get_absolute_url }}delete" class="btn" id="btn-post" role="button">Delete</a>
+			{% endif %}
+		</span>
+		</div>
+	</div>
+{% endfor %}
+
+<div class="pagination">
+	<span class="step-links">
+		{% if object_list.has_previous %}
+			<a href="?{{ page_request_var }}={{ object_list.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">previous</a>
+		{% endif %}
+
+		<span class="current">
+			Page {{ object_list.number }} of {{ object_list.paginator.num_pages }}.
+		</span>
+
+		{% if object_list.has_next %}
+			<a href="?{{ page_request_var }}={{ object_list.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">next</a>
+		{% endif %}
+	</span>
+</div>
+
+</div>
+
+{% endblock content %}

@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% load urlify %}
+{% load split_tags %}
+{% load crispy_forms_tags %}
+
+{% block head_extra %}  {{ comment_form.media }} {% endblock head_extra %}
+
+{% block content %}
+
+<div class="container mt40 ">
+    <section class="row">
+
+        {% for post in post_atw %}
+        <article class="col-xs-12 col-sm-6 col-md-3">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <a href="{{ post.image.url }}" class="zoom" data-title="{{ post.title }}" data-footer="
+                    <div align='center'><a class='btn-gallery' href='{{ post.get_absolute_url }}' role='button'>See the details</a></div>"
+                    data-type="image" data-toggle="lightbox">
+                        {% if post.image %}<img src="{{ post.image.url }}" />{% endif %}
+                        <span class="overlay"><i class="glyphicon glyphicon-fullscreen"></i></span>
+                    </a>
+                </div>
+                <div class="panel-footer">
+                    <h4><a href="{{ post.get_absolute_url }}" >{{ post.title }} </a></h4>
+                </div>
+            </div>
+        </article>
+        {% endfor %}                                     
+
+</section>
+</div>
+
+{% endblock content %}

@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% load urlify %}
+{% load split_tags %}
+{% load crispy_forms_tags %}
+
+{% block head_extra %}  {{ comment_form.media }} {% endblock head_extra %}
+
+{% block content %}
+{% include 'sidebar.html' %}
+
+<div class="col-xs-12 col-sm-8 col-md-9" id="content">
+    {% include "message_display.html" %}
+
+    {% include "toggle-nav.html" %}
+
+
+<div class="well">
+
+<h4  id="blog-title"><i class="fa fa-pencil-square" aria-hidden="true"></i> {{title}} </h4>
+<div id="post-info">
+<a href="/?c={{ instance.category }}" style="font-weight:bold;" > {{ instance.get_category_display }} </a> &nbsp;|
+{% for tag in instance.tag|split_tags %}
+<div id="label-tag" class="label"> <a id="a-tag" href="/?t={{ tag }}">{{ tag }}</a> </div>
+{% endfor %} &nbsp;|&nbsp;
+<span> Created on {{ instance.created }} </span> &nbsp;|&nbsp;
+<!-- {% if instance.user.get_full_name %}<span> Author : {{ instance.user.get_full_name }} </span> &nbsp;|&nbsp; {% endif %}  -->
+<span> Update {{ instance.modified|timesince }} ago </span> 
+
+</div>
+{% if instance.image %}
+<a href="{{ instance.get_absolute_url }}"> <img id="image-blog" src="{{ instance.image.url }}" class="img-responsive img-rounded"></a>
+{% endif %}
+
+<!-- Like button -->
+<div class="fb-like" data-colorscheme='dark' data-href="{{ request.build_absolute_uri }}" data-layout="standard" data-action="like" data-size="small" data-show-faces="true" data-share="true"></div>
+<hr>
+
+<div class="post-detail-item"> {{ instance.get_markdown }}</div>
+
+<!-- {{ pygments|safe }} -->
+
+<!-- {{ instance.content|truncatechars:80|urlify }} -->
+
+<hr>
+
+<div>
+	<h5><i class="fa fa-comments" aria-hidden="true"></i> Comments</h5>
+		<div><small>You may want to use this in the comment :</small>
+		<pre><code class="nohighlight">&lt;pre&gt;&lt;code&gt; For code. &lt;/code&gt;&lt;/pre&gt;</code></pre>
+		</div>
+
+	<form method="POST" action="."> {% csrf_token %}
+		{{ comment_form|crispy }}
+		<input type="submit" value="Post comment" class="btn btn-default">
+	</form>
+	<hr>
+
+
+	{% for comment in comments %}
+		<div class="">
+			<blockquote>
+				{{ comment.content|safe|linebreaks }}
+				<!-- {{ comment.get_markdown }} -->
+				<footer><i class="fa fa-comment" aria-hidden="true"></i>  {{ comment.name }} | {{comment.timestamp|timesince }} ago |
+					<a class="comment-reply-btn" href="#"><i class="fa fa-reply" aria-hidden="true"></i>
+ Reply</a>
+				</footer>
+
+				<div class="comment-reply" style="display:none;">
+					<form method="POST" action="."> {% csrf_token %}
+						{{ comment_form|crispy }}
+						<input type="hidden" name="parent_id" value="{{ comment.id }}">
+						<input type="submit" value="Reply" class="btn btn-default">
+					</form>
+				</div>
+				
+				{% for child_comment in comment.children %}
+						<blockquote id="quote_comment">
+							{{ child_comment.content|safe|linebreaks }}
+							<footer> <i class="fa fa-reply" aria-hidden="true"></i>
+ {{ child_comment.name }} | {{child_comment.timestamp|timesince }} ago </footer>
+						</blockquote>
+				{% endfor %}
+
+				
+
+			</blockquote>
+		</div>
+
+	{% endfor %}
+</div>
+
+<!-- <div class="fb-comments" data-colorscheme="dark" data-href="{{ request.build_absolute_uri }}" data-numposts="5"></div> -->
+
+</div>
+
+</div>
+
+{% endblock content %}

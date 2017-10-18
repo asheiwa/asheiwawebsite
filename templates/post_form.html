@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block head_extra %}  {{ form.media }} {% endblock head_extra %}
+
+{% block content %}
+
+{% include 'sidebar.html' %}
+
+<div class="col-xs-12 col-sm-8 col-md-9" id="content">
+    {% include "message_display.html" %}
+
+    {% include "toggle-nav.html" %}
+
+	<!-- Create Post Form -->
+	<h3>{{ title }}</h3>
+	<hr class="style1">
+
+	<form method="POST" action="" enctype="multipart/form-data"> {% csrf_token %}
+		{{ form|crispy }}
+		<input style="height:30px;" type="submit" value="{{ title }}" >
+	</form>
+
+	<hr class="style1">
+
+</div>
+
+{% endblock content %}

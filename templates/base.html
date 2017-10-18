@@ -1,0 +1,160 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>asheiwa</title>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>index</title>
+    <link rel="icon" href="{% static 'img/main-img/ash-logo.jpg' %}">
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/reset.css' %}">
+    <link rel="stylesheet" href="{% static 'css/styles.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/monokai.css' %}">
+    <link rel="stylesheet" href="{% static 'css/default.css' %}">
+    <link rel="stylesheet" href="{% static 'css/gallery.css' %}">
+    <link rel="stylesheet" href="{% static 'font-awesome-4.7.0/css/font-awesome.min.css' %}">
+
+    {% block head_extra %} {% endblock head_extra %}
+</head>
+
+<body>
+
+    {% include 'navbar.html' %}
+
+    <div class="container" id="main-container">
+
+        {% include 'carousel.html' %}
+
+        <div class="row row-offcanvas row-offcanvas-left">
+
+            {% block content %} {% endblock content %}
+
+        </div>
+
+    </div>
+
+    <div class="container-fluid" id="footer">
+        <div align="center">asheiwa website © 2017</div> 
+    </div>
+
+    <!-- Script area -->
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.6/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.8.2/js/lightbox.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.3.1/js/swiper.jquery.min.js"></script>
+    <script src="{% static 'js/script.min.js' %}"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+    <script src="//rawgithub.com/ashleydw/lightbox/master/dist/ekko-lightbox.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+
+    <script type="text/javascript">
+        // content-markdown
+        $(document).ready(function(){
+            $(".content-markdown").each(function(){
+                var content = $(this).text()
+                console.log(content)
+                var markedContent = marked(content)
+                console.log(markedContent)
+                $(this).html(markedContent)
+            })
+            $(".post-detail-item img").each(function(){
+                $(this).addClass("img-responsive")
+            })
+        })
+
+        // reply btn fade toggle
+        $(".comment-reply-btn").click(function(event){
+            event.preventDefault();
+            $(this).parent().next(".comment-reply").fadeToggle();
+        })
+
+        // Tab on text area
+        $("textarea").keydown(function(e) {
+            if(e.keyCode === 9) { // tab was pressed
+                // get caret position/selection
+                var start = this.selectionStart;
+                var end = this.selectionEnd;
+
+                var $this = $(this);
+                var value = $this.val();
+
+                // set textarea value to: text before caret + tab + text after caret
+                $this.val(value.substring(0, start)
+                            + "\t"
+                            + value.substring(end));
+
+                // put caret at right position again (add one for the tab)
+                this.selectionStart = this.selectionEnd = start + 1;
+
+                // prevent the focus lose
+                e.preventDefault();
+            }
+        })
+
+        // Nav bar set active
+        $(document).ready(function () {         
+        $(function(){
+            var current_page_URL = location.href;
+
+            $( "a" ).each(function() {
+
+                if ($(this).attr("href") !== "#") {
+
+                    var target_URL = $(this).prop("href");
+
+                        if (target_URL == current_page_URL) {
+                            $('nav a').parents('li, ul').removeClass('active');
+                            $(this).parent('li').addClass('active');
+
+                            return false;
+                        }
+                }
+            }); }); });
+
+        // interval is in milliseconds. 1000 = 1 second - so 1000 * 10 = 10 seconds
+        $('.carousel').carousel({
+            interval: 1000 * 5
+        });
+
+        // Off canvas
+        $(document).ready(function () {
+            $('[data-toggle="offcanvas"]').click(function () {
+                $('.row-offcanvas').toggleClass('active')
+            });
+        });
+
+        // gallery
+        $(document).ready(function() {              
+            $('i.glyphicon-thumbs-up, i.glyphicon-thumbs-down').click(function(){    
+                var $this = $(this),
+                c = $this.data('count');    
+                if (!c) c = 0;
+                c++;
+                $this.data('count',c);
+                $('#'+this.id+'-bs3').html(c);
+            });      
+            $(document).delegate('*[data-toggle="lightbox"]', 'click', function(event) {
+                event.preventDefault();
+                $(this).ekkoLightbox();
+            });                                        
+        });
+
+
+    </script>
+
+</body>
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.9";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+</html>

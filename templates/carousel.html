@@ -1,0 +1,52 @@
+{% load staticfiles %}
+
+<!-- Carousel-->
+<div id="myCarousel" class="carousel slide" data-ride="carousel">
+
+  <!-- Indicators -->
+  <ol class="carousel-indicators">
+    {% for x in post_pin %}
+      {% if x == 0 %}
+      <li data-target="#myCarousel" data-slide-to="{{ x }}" class="active"></li>
+      {% else %}
+      <li data-target="#myCarousel" data-slide-to="{{ x }}" ></li>
+      {% endif %}
+
+    {% endfor %}
+  </ol>
+
+  <div class="carousel-inner" role="listbox">
+
+    {% for x, post in post_pin.items %}
+
+      {% if x == 0 %} <div class="item active">
+      {% else %} <div class="item">{% endif %}
+
+        <div>
+        {% if post.image %}<img class="img-responsive" src="{{ post.image.url }}">{% endif %}</div>
+          <div class="container">
+            <div class="carousel-caption">
+              <a href="{{ post.get_absolute_url }}"><h3 id="blog-title" >{{ post.title }}</h3></a>
+              <p>{{ post.get_markdown|truncatechars_html:150 }}</p>
+              <p><a id="btn-carousel" class="btn" href="{{ post.get_absolute_url }}" role="button">Read More</a></p>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+
+  </div>
+
+
+  <!-- carousel control -->
+  <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+    <span class="sr-only">Previous</span>
+  </a>
+
+  <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
+    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+    <span class="sr-only">Next</span>
+  </a>
+
+</div>
+<!-- /.carousel -->
