@@ -4,6 +4,7 @@ staticfiles
 .env
 .sublime-project
 .sublime-workspace
+db.sqlite3
 
 
 # Byte-compiled / optimized / DLL files
